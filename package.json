@@ -1,0 +1,17 @@
+{
+  "name": "goertzel-filter",
+  "version": "1.0.0",
+  "description": "goertzel-filter implementation",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test/test.js"
+  },
+  "keywords": [
+    "goertzel",
+    "filter",
+    "frequency",
+    "fft"
+  ],
+  "author": "Chinmay Pendharkar <notthetup@gmail.com>",
+  "license": "MIT"
+}
