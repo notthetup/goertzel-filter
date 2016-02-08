@@ -1,3 +1,5 @@
+<html>
+<script>
 function GoertzelFilterASM(stdlib, foreign, heap){
   "use asm";
 
@@ -39,7 +41,8 @@ function GoertzelFilterASM(stdlib, foreign, heap){
   }
 }
 
-module.exports = {
+
+var gf = {
   init: function(dFreq,sFreq,length){
     var stdlib;
     var heap = new ArrayBuffer(0x10000);
@@ -58,3 +61,28 @@ module.exports = {
     return goertzelfilter.run();
   }
 }
+
+var frequency = 4000;
+var offset = 0;
+var sampleRate = 44100;
+var length = 1*sampleRate;
+var chunkSize = 128;
+
+var samples = new Float32Array(length);
+
+for(var index = 0; index < length; index++){
+  samples[index] = Math.cos(2*Math.PI*frequency*index/sampleRate);
+}
+
+gf.init(frequency+offset,sampleRate, chunkSize);
+
+var numChunks = Math.floor(length/chunkSize);
+for(cIndex = 0; cIndex < numChunks; cIndex++){
+  var start = cIndex*chunkSize;
+  var chunkSample = samples.slice(start,start+chunkSize);
+  console.log(gf.run(chunkSample) > 0.1);
+}
+
+
+</script>
+</html>
