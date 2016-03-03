@@ -1,16 +1,22 @@
 var gf = require('../index.js');
 
-var frequency = 4000;
-var offset = 0;
+var frequency = Math.random()*20000;
+var offset = 1;
 var sampleRate = 44100;
-var length = 2*sampleRate;
+var length = 10*sampleRate;
 var chunkSize = 128;
+
+console.log("Freq: ", frequency);
 
 var samples = new Float32Array(length);
 
 for(var index = 0; index < length; index++){
   samples[index] = Math.cos(2*Math.PI*frequency*index/sampleRate);
 }
+
+// for(var index = 0; index < length; index++){
+//   samples[index] = Math.random();
+// }
 
 gf.init(frequency+offset,sampleRate, chunkSize);
 
@@ -30,4 +36,15 @@ function getAvg(values) {
   }) / values.length;
 }
 
-console.log(getAvg(result), Math.max.apply(null, result),Math.min.apply(null, result))
+var avg = getAvg(result);
+
+var squareDiffs = result.map(function(value){
+  var diff = value - avg;
+  var sqr = diff * diff;
+  return sqr;
+});
+
+var avgSquareDiff = getAvg(squareDiffs);
+var stdDev = Math.sqrt(avgSquareDiff);
+
+console.log("Max:", Math.max.apply(null, result),"Min:", Math.min.apply(null, result), "Avg:", avg, "Sig:", stdDev)
