@@ -9,6 +9,7 @@ function GoertzelFilterASM(stdlib, foreign, heap){
   var prev1 = 0.0;
   var coefficient = 0.0;
   var length = 0;
+  var targetFrequency = 0;
 
   function init(dFreq,sFreq,len){
     dFreq = +dFreq;
@@ -19,7 +20,8 @@ function GoertzelFilterASM(stdlib, foreign, heap){
 
     prev0 = +0;
     prev1 = +0;
-    coefficient= 2.0*cos(2.0*PI*dFreq/sFreq)
+    coefficient= 2.0*cos(2.0*PI*dFreq/sFreq);
+    targetFrequency = dFreq;
   }
 
   function run(){
@@ -39,6 +41,9 @@ function GoertzelFilterASM(stdlib, foreign, heap){
   }
 }
 
+var targetFrequency = 0;
+var heapBuffer;
+
 module.exports = {
   init: function(dFreq,sFreq,length){
     var stdlib;
@@ -50,6 +55,8 @@ module.exports = {
     }else{
       stdlib = global;
     }
+
+    targetFrequency = dFreq;
     goertzelfilter = GoertzelFilterASM(stdlib, {}, heap);
     goertzelfilter.init(dFreq,sFreq,length);
   },
@@ -57,5 +64,5 @@ module.exports = {
     heapBuffer.set(samples);
     return goertzelfilter.run();
   },
-  targetFrequency: dFreq
+  targetFrequency: targetFrequency
 }
