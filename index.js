@@ -56,5 +56,6 @@ module.exports = {
   run: function(samples){
     heapBuffer.set(samples);
     return goertzelfilter.run();
-  }
+  },
+  targetFrequency: dFreq
 }
