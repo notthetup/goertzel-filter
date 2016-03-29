@@ -9,7 +9,7 @@ function GoertzelFilterASM(stdlib, foreign, heap){
   var prev1 = 0.0;
   var coefficient = 0.0;
   var length = 0;
-  var targetFrequency = 0;
+  var targetFrequency = 0.0;
 
   function init(dFreq,sFreq,len){
     dFreq = +dFreq;
@@ -32,7 +32,7 @@ function GoertzelFilterASM(stdlib, foreign, heap){
       prev1 = prev0;
       prev0 = s;
     }
-    return ((prev1*prev1)+(prev0*prev0)-(coefficient*prev0*prev1))/+(length|0)/2;
+    return ((prev1*prev1)+(prev0*prev0)-(coefficient*prev0*prev1))/+(length|0)/2.0;
   }
 
   return {
