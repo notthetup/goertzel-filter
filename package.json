@@ -16,7 +16,7 @@
   ],
   "author": "Chinmay Pendharkar <notthetup@gmail.com>",
   "license": "MIT",
-  "dependencies": {
+  "devDependencies": {
     "browserify": "^13.0.0"
   }
 }
