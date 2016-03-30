@@ -8,6 +8,10 @@
     "test": "node test/test.js",
     "test-browser": "npm run build && http-server"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/notthetup/goertzel-filter.git"
+  },
   "keywords": [
     "goertzel",
     "filter",
@@ -16,6 +20,10 @@
   ],
   "author": "Chinmay Pendharkar <notthetup@gmail.com>",
   "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/notthetup/goertzel-filter/issues"
+  },
+  "homepage": "https://github.com/notthetup/goertzel-filter#readme",
   "devDependencies": {
     "browserify": "^13.0.0"
   }
