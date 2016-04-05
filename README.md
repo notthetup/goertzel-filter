@@ -42,7 +42,7 @@ var result = gf.run(sample);
 		- `frequencyToDetect` : __Number__ - The frequency (in Hz) to be detected.
 		- `sampleRate` : __Number__ - Sampling rate of the signal being analyzed.
 		- `chunkSize` : __Number__ - Length of data to be processed during each run of the algorithm.
-    
+
 - `run` : Run the goertzel algorithm on the given chunk of data to determine if it has any energy in the frequency to be detected. Returns the power of the signal in that frequency bucket. Can be called multiple times on the successive chunks of a stream of data.
 	- eg :
 	```js
@@ -51,7 +51,7 @@ var result = gf.run(sample);
 	- arguments:
 		- `sample` : __Float32Array__ - An array of data to be analyzed. The size of the array has to be equal to the `chunkSize` used during the `init`.
 
-  - return: Returns the power of the signal at `frequencyToDetect`. The higher the number the more (relative) power was detected at that frequency.
+  - returns: Returns the power of the signal at `frequencyToDetect`. The higher the number the more (relative) power was detected at that frequency.
 
 
 # License
