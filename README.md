@@ -10,8 +10,11 @@ This package implements the goertzel algorithm in [asm.js](https://en.wikipedia.
 
 # Usage
 
-`npm install goertzel-filter`
+This can run both in a browser or in nodejs.
 
+## nodejs
+
+`npm install goertzel-filter`
 
 ```js
 var gf = require('goertzel-filter');
@@ -28,6 +31,29 @@ var sample = new Float32Array(chunkSize);
 var result = gf.run(sample);
 
 ```
+
+## browser
+
+A [standalone browserified](http://www.forbeslindesay.co.uk/post/46324645400/standalone-browserify-builds) file is also [available here](https://github.com/notthetup/goertzel-filter/blob/master/dist/goertzel.js), which creates a global named `GoertzelFilter` when included in the html.
+
+```html
+<script src="/dist/goertzel.js"></script>
+<script>
+	var gf = GoertzelFilter;
+
+	var frequencyToDetect = 440;
+	var sampleRate = 44100;
+	var chunkSize = 128;
+
+	gf.init(frequencyToDetect, sampleRate, chunkSize);
+
+	var sample = new Float32Array(chunkSize);
+	// fill up samples with some data here.
+
+	var result = gf.run(sample);
+</script>
+```
+
 
 # API
 
