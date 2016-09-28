@@ -1,28 +1,106 @@
+
 <html>
+<body>
+  <p>
+    Test Oscillator Freq :
+  </p>
+  <input id="tFreq" type="range" value="440" min="0" max="10000"/>
+  <p id="tFreqLabel">
+    440 Hz
+  </p>
+  <div>
+    <p>
+      GoertzelNode Detection Frequency :
+    </p>
+    <input id="dFreq" type="range" value="440" min="0" max="10000"/>
+    <p id="dFreqLabel">
+      440 Hz
+    </p>
+  </div>
+  <div id="results"></div>
+</body>
 <script src="/dist/goertzel.js"></script>
 <script>
 
 var gf = GoertzelFilter;
 
-var frequency = 4000;
-var offset = 0;
-var sampleRate = 44100;
-var length = 1*sampleRate;
-var chunkSize = 128;
+var testFrequency = 440;
+var detectionFrequency = 440;
 
+var sampleRate = 44100;
+var length = 5*sampleRate;
+var chunkSize = 256;
 var samples = new Float32Array(length);
 
-for(var index = 0; index < length; index++){
-  samples[index] = Math.cos(2*Math.PI*frequency*index/sampleRate);
+var resultsDiv;
+
+window.addEventListener('load', function(){
+  var tFreqSlider = document.querySelector('#tFreq');
+  var tFreqLabel = document.querySelector('#tFreqLabel');
+  var dFreqSlider = document.querySelector('#dFreq');
+  var dFreqLabel = document.querySelector('#dFreqLabel');
+  resultsDiv = document.querySelector('#results');
+
+
+  tFreqSlider.addEventListener('input', function(){
+    testFrequency = parseFloat(tFreqSlider.value);
+    tFreqLabel.innerHTML = testFrequency + " Hz";
+  });
+
+  tFreqSlider.addEventListener('change', function(){
+    runTest();
+  });
+
+  dFreqSlider.addEventListener('input', function(){
+    detectionFrequency = parseFloat(dFreqSlider.value);
+    dFreqLabel.innerHTML = detectionFrequency + " Hz";
+  });
+
+  dFreqSlider.addEventListener('change', function(){
+    runTest();
+  });
+
+});
+
+function runTest(){
+
+  for(var index = 0; index < length; index++){
+    samples[index] = Math.cos(2*Math.PI*testFrequency*index/sampleRate);
+  }
+  var testResults = {
+    pass : 0,
+    fail : 0
+  };
+
+  gf.init(testFrequency,sampleRate, chunkSize);
+
+  var numChunks = Math.floor(length/chunkSize);
+  for(cIndex = 0; cIndex < numChunks; cIndex++){
+    var start = cIndex*chunkSize;
+    var chunkSample = samples.slice(start,start+chunkSize);
+    gf.run(chunkSample) > 0.2 ? testResults.pass++ : testResults.fail++
+  }
+
+  var detectionResults = {
+    pass : 0,
+    fail : 0
+  };
+
+  gf.init(detectionFrequency,sampleRate, chunkSize);
+
+  var numChunks = Math.floor(length/chunkSize);
+  for(cIndex = 0; cIndex < numChunks; cIndex++){
+    var start = cIndex*chunkSize;
+    var chunkSample = samples.slice(start,start+chunkSize);
+    gf.run(chunkSample) > 0.2 ? detectionResults.pass++ : detectionResults.fail++
+  }
+
+  resultsDiv.innerHTML = `<h3>Test Results</h3>
+  <p>Testing Frequency : ${testFrequency} </p>
+  <p>Detection Frequency : ${detectionFrequency} </p>
+  <p>With Test Frequency : pass = ${testResults.pass}, fail = ${testResults.fail} </p>
+  <p>With Detection Frequency : pass = ${detectionResults.pass} , fail = ${detectionResults.fail}</p>`;
 }
 
-gf.init(frequency+offset,sampleRate, chunkSize);
-
-var numChunks = Math.floor(length/chunkSize);
-for(cIndex = 0; cIndex < numChunks; cIndex++){
-  var start = cIndex*chunkSize;
-  var chunkSample = samples.slice(start,start+chunkSize);
-  console.log(gf.run(chunkSample) > 0.1);
-}
 </script>
 </html>

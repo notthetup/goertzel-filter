@@ -1,12 +1,13 @@
 var gf = require('../index.js');
 
 var frequency = Math.random()*20000;
-var offset = 1;
+var offset =0.001*frequency;
 var sampleRate = 44100;
-var length = 10*sampleRate;
-var chunkSize = 128;
+var length = 20*sampleRate;
+var chunkSize = 2048;
 
-console.log("Freq: ", frequency);
+console.log("Generated Freq: ", frequency);
+console.log("Offset: ", offset);
 
 var samples = new Float32Array(length);
 
