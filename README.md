@@ -77,7 +77,7 @@ A [standalone browserified](http://www.forbeslindesay.co.uk/post/46324645400/sta
 	- arguments:
 		- `sample` : __Float32Array__ - An array of data to be analyzed. The size of the array has to be equal to the `chunkSize` used during the `init`.
 
-  - returns: Returns the power of the signal at `frequencyToDetect`. The higher the number the more (relative) power was detected at that frequency.
+  - returns: Returns the power of the signal at `frequencyToDetect`. The higher the number the more (relative) power was detected at that frequency. This value is normalised to `chunkSize` and should be about `0.25` for a perfect match.
 
 
 # License
