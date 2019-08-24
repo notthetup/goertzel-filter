@@ -1,5 +1,5 @@
 function GoertzelFilterASM(stdlib, foreign, heap){
-  "use asm";
+  'use asm';
 
   var cos = stdlib.Math.cos;
   var PI = stdlib.Math.PI;
@@ -36,31 +36,33 @@ function GoertzelFilterASM(stdlib, foreign, heap){
   return {
     init: init,
     run: run
-  }
+  };
 }
 
-var targetFrequency = 0;
-var heapBuffer;
+module.exports = function(){
+  var targetFrequency = 0;
+  var heapBuffer;
+  var goertzelfilter;
+  return {
+    init: function(dFreq,sFreq,length){
+      var stdlib;
+      var heap = new ArrayBuffer(0x10000);
+      heapBuffer =new Float32Array(heap);
 
-module.exports = {
-  init: function(dFreq,sFreq,length){
-    var stdlib;
-    var heap = new ArrayBuffer(0x10000);
-    heapBuffer =new Float32Array(heap);
+      if (typeof window !== 'undefined'){
+        stdlib = window;
+      }else{
+        stdlib = global;
+      }
 
-    if (typeof window !== 'undefined'){
-      stdlib = window;
-    }else{
-      stdlib = global;
-    }
-
-    targetFrequency = dFreq;
-    goertzelfilter = GoertzelFilterASM(stdlib, {}, heap);
-    goertzelfilter.init(dFreq,sFreq,length);
-  },
-  run: function(samples){
-    heapBuffer.set(samples);
-    return goertzelfilter.run();
-  },
-  targetFrequency: targetFrequency
-}
+      targetFrequency = dFreq;
+      goertzelfilter = GoertzelFilterASM(stdlib, {}, heap);
+      goertzelfilter.init(dFreq,sFreq,length);
+    },
+    run: function(samples){
+      heapBuffer.set(samples);
+      return goertzelfilter.run();
+    },
+    targetFrequency: targetFrequency
+  };
+};
